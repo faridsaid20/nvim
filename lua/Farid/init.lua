@@ -14,8 +14,17 @@ augroup custom_keymaps
     " autocmd VimEnter * vnoremap <C-e> $
     " autocmd VimEnter * nnoremap <C-m> 0
     " autocmd VimEnter * inoremap <C-m> 0
-    " autocmd VimEnter * vnoremap <C-m> 0
-    autocmd VimEnter * nnoremap rs :Telescope lsp_references<CR>
+    " autocmd VimEnter * noremap a i
+    " autocmd VimEnter * noremap m h
+    " autocmd VimEnter * noremap n j
+    " autocmd VimEnter * noremap e k
+    " autocmd VimEnter * noremap i l
+
+    " autocmd VimEnter * nnoremap <C-Z> <Nop>
+
+    autocmd VimEnter * nnoremap <C-A> <C-O>
+   " autocmd VimEnter * vnoremap <C-m> 0
+    " autocmd VimEnter * nnoremap rs :Telescope lsp_references<CR>
 augroup END
 ]]
 

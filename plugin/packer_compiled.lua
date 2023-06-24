@@ -91,6 +91,11 @@ _G.packer_plugins = {
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/LuaSnip",
     url = "https://github.com/L3MON4D3/LuaSnip"
   },
+  ["bufferline.nvim"] = {
+    loaded = true,
+    path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/bufferline.nvim",
+    url = "https://github.com/akinsho/bufferline.nvim"
+  },
   ["cellular-automaton.nvim"] = {
     loaded = true,
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/cellular-automaton.nvim",
@@ -121,15 +126,21 @@ _G.packer_plugins = {
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
   },
-  ["copilot.vim"] = {
+  ["copilot.lua"] = {
     loaded = true,
-    path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/copilot.vim",
-    url = "https://github.com/github/copilot.vim"
+    path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/copilot.lua",
+    url = "https://github.com/zbirenbaum/copilot.lua"
   },
   ["diffview.nvim"] = {
     loaded = true,
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/diffview.nvim",
     url = "https://github.com/sindrets/diffview.nvim"
+  },
+  ["flash.nvim"] = {
+    config = { "\27LJ\2\nw\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\tchar\1\0\1\vlabels!etovxmpdygfblzhckisuranqwj/?\1\0\1\fenabled\1\nsetup\nflash\frequire\0" },
+    loaded = true,
+    path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/flash.nvim",
+    url = "https://github.com/folke/flash.nvim"
   },
   ["friendly-snippets"] = {
     loaded = true,
@@ -153,16 +164,16 @@ _G.packer_plugins = {
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/harpoon",
     url = "https://github.com/theprimeagen/harpoon"
   },
-  ["hop.nvim"] = {
-    config = { "\27LJ\2\nU\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\1\tkeys\28etovxqpdygfblzhckisuran\nsetup\bhop\frequire\0" },
-    loaded = true,
-    path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/hop.nvim",
-    url = "https://github.com/phaazon/hop.nvim"
-  },
   ["indent-blankline.nvim"] = {
     loaded = true,
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
     url = "https://github.com/lukas-reineke/indent-blankline.nvim"
+  },
+  ["jfind.nvim"] = {
+    config = { "\27LJ\2\n™\2\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\fexclude\1\0\4\vborder\frounded\14maxHeight\3(\rmaxWidth\3x\16formatPaths\2\1\18\0\0\t.git\n.idea\f.vscode\16.sass-cache\v.class\16__pycache__\17node_modules\vtarget\nbuild\btmp\vassets\tdist\vpublic\n*.iml\v*.meta\30*roc_rsp_gui_benchremote*\18*roc_cap_gui*\nsetup\njfind\frequire\0" },
+    loaded = true,
+    path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/jfind.nvim",
+    url = "https://github.com/jake-stewart/jfind.nvim"
   },
   ["lsp-zero.nvim"] = {
     loaded = true,
@@ -189,8 +200,13 @@ _G.packer_plugins = {
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/mason.nvim",
     url = "https://github.com/williamboman/mason.nvim"
   },
+  ["mini.ai"] = {
+    loaded = true,
+    path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/mini.ai",
+    url = "https://github.com/echasnovski/mini.ai"
+  },
   ["noice.nvim"] = {
-    config = { "\27LJ\2\në\2\0\0\5\0\14\0\0176\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\0025\3\6\0=\3\a\0025\3\t\0005\4\b\0=\4\n\3=\3\v\0025\3\f\0=\3\r\2B\0\2\1K\0\1\0\fpresets\1\0\5\20command_palette\2\18bottom_search\1\19lsp_doc_border\1\15inc_rename\1\26long_message_to_split\2\blsp\roverride\1\0\0\1\0\3 cmp.entry.get_documentation\0021vim.lsp.util.convert_input_to_markdown_lines\2\"vim.lsp.util.stylize_markdown\2\rprogress\1\0\1\fenabled\1\14popupmenu\1\0\0\1\0\1\fbackend\bcmp\nsetup\nnoice\frequire\0" },
+    config = { "\27LJ\2\nˆ\3\0\0\5\0\16\0\0196\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\0025\3\6\0=\3\a\0025\3\t\0005\4\b\0=\4\n\3=\3\v\0025\3\f\0=\3\r\0025\3\14\0=\3\15\2B\0\2\1K\0\1\0\fpresets\1\0\5\20command_palette\2\26long_message_to_split\2\18bottom_search\1\19lsp_doc_border\1\15inc_rename\1\rmessages\1\0\1\fenabled\1\blsp\roverride\1\0\0\1\0\0031vim.lsp.util.convert_input_to_markdown_lines\2 cmp.entry.get_documentation\2\"vim.lsp.util.stylize_markdown\2\rprogress\1\0\1\fenabled\1\14popupmenu\1\0\0\1\0\1\fbackend\bcmp\nsetup\nnoice\frequire\0" },
     loaded = true,
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/noice.nvim",
     url = "https://github.com/folke/noice.nvim"
@@ -236,6 +252,12 @@ _G.packer_plugins = {
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/nvim-notify",
     url = "https://github.com/rcarriga/nvim-notify"
   },
+  ["nvim-surround"] = {
+    config = { "\27LJ\2\n?\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\18nvim-surround\frequire\0" },
+    loaded = true,
+    path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/nvim-surround",
+    url = "https://github.com/kylechui/nvim-surround"
+  },
   ["nvim-tree.lua"] = {
     config = { "\27LJ\2\n;\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\14nvim-tree\frequire\0" },
     loaded = true,
@@ -277,6 +299,11 @@ _G.packer_plugins = {
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/plenary.nvim",
     url = "https://github.com/nvim-lua/plenary.nvim"
   },
+  ["telescope-live-grep-args.nvim"] = {
+    loaded = true,
+    path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/telescope-live-grep-args.nvim",
+    url = "https://github.com/nvim-telescope/telescope-live-grep-args.nvim"
+  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/telescope.nvim",
@@ -288,15 +315,15 @@ _G.packer_plugins = {
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/trouble.nvim",
     url = "https://github.com/folke/trouble.nvim"
   },
+  ["typescript-tools.nvim"] = {
+    loaded = true,
+    path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/typescript-tools.nvim",
+    url = "https://github.com/pmizio/typescript-tools.nvim"
+  },
   undotree = {
     loaded = true,
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/undotree",
     url = "https://github.com/mbbill/undotree"
-  },
-  ["vim-code-dark"] = {
-    loaded = true,
-    path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/vim-code-dark",
-    url = "https://github.com/tomasiser/vim-code-dark"
   },
   ["vim-fugitive"] = {
     loaded = true,
@@ -313,13 +340,8 @@ _G.packer_plugins = {
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/vim-visual-multi",
     url = "https://github.com/mg979/vim-visual-multi"
   },
-  ["vscode.nvim"] = {
-    loaded = true,
-    path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/vscode.nvim",
-    url = "https://github.com/Mofiqul/vscode.nvim"
-  },
   ["which-key.nvim"] = {
-    config = { "\27LJ\2\n¡\1\0\0\4\0\n\0\0176\0\0\0009\0\1\0+\1\2\0=\1\2\0006\0\0\0009\0\1\0)\1,\1=\1\3\0006\0\4\0'\2\5\0B\0\2\0029\0\6\0005\2\b\0005\3\a\0=\3\t\2B\0\2\1K\0\1\0\14operators\1\0\0\1\0\2\fpresets\2\agc\rComments\nsetup\14which-key\frequire\15timeoutlen\ftimeout\6o\bvim\0" },
+    config = { "\27LJ\2\n¡\1\0\0\4\0\n\0\0176\0\0\0009\0\1\0+\1\2\0=\1\2\0006\0\0\0009\0\1\0)\1,\1=\1\3\0006\0\4\0'\2\5\0B\0\2\0029\0\6\0005\2\b\0005\3\a\0=\3\t\2B\0\2\1K\0\1\0\14operators\1\0\0\1\0\2\agc\rComments\fpresets\2\nsetup\14which-key\frequire\15timeoutlen\ftimeout\6o\bvim\0" },
     loaded = true,
     path = "/home/ubuntu/.local/share/nvim/site/pack/packer/start/which-key.nvim",
     url = "https://github.com/folke/which-key.nvim"
@@ -327,46 +349,54 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: goto-preview
-time([[Config for goto-preview]], true)
-try_loadstring("\27LJ\2\n>\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\17goto-preview\frequire\0", "config", "goto-preview")
-time([[Config for goto-preview]], false)
--- Config for: Comment.nvim
-time([[Config for Comment.nvim]], true)
-try_loadstring("\27LJ\2\n5\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\fComment\frequire\0", "config", "Comment.nvim")
-time([[Config for Comment.nvim]], false)
--- Config for: trouble.nvim
-time([[Config for trouble.nvim]], true)
-try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\ftrouble\frequire\0", "config", "trouble.nvim")
-time([[Config for trouble.nvim]], false)
--- Config for: hop.nvim
-time([[Config for hop.nvim]], true)
-try_loadstring("\27LJ\2\nU\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\1\tkeys\28etovxqpdygfblzhckisuran\nsetup\bhop\frequire\0", "config", "hop.nvim")
-time([[Config for hop.nvim]], false)
 -- Config for: nvim-autopairs
 time([[Config for nvim-autopairs]], true)
 try_loadstring("\27LJ\2\n@\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\19nvim-autopairs\frequire\0", "config", "nvim-autopairs")
 time([[Config for nvim-autopairs]], false)
+-- Config for: nvim-surround
+time([[Config for nvim-surround]], true)
+try_loadstring("\27LJ\2\n?\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\18nvim-surround\frequire\0", "config", "nvim-surround")
+time([[Config for nvim-surround]], false)
+-- Config for: goto-preview
+time([[Config for goto-preview]], true)
+try_loadstring("\27LJ\2\n>\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\17goto-preview\frequire\0", "config", "goto-preview")
+time([[Config for goto-preview]], false)
+-- Config for: noice.nvim
+time([[Config for noice.nvim]], true)
+try_loadstring("\27LJ\2\nˆ\3\0\0\5\0\16\0\0196\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\0025\3\6\0=\3\a\0025\3\t\0005\4\b\0=\4\n\3=\3\v\0025\3\f\0=\3\r\0025\3\14\0=\3\15\2B\0\2\1K\0\1\0\fpresets\1\0\5\20command_palette\2\26long_message_to_split\2\18bottom_search\1\19lsp_doc_border\1\15inc_rename\1\rmessages\1\0\1\fenabled\1\blsp\roverride\1\0\0\1\0\0031vim.lsp.util.convert_input_to_markdown_lines\2 cmp.entry.get_documentation\2\"vim.lsp.util.stylize_markdown\2\rprogress\1\0\1\fenabled\1\14popupmenu\1\0\0\1\0\1\fbackend\bcmp\nsetup\nnoice\frequire\0", "config", "noice.nvim")
+time([[Config for noice.nvim]], false)
 -- Config for: nvim-tree.lua
 time([[Config for nvim-tree.lua]], true)
 try_loadstring("\27LJ\2\n;\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\14nvim-tree\frequire\0", "config", "nvim-tree.lua")
 time([[Config for nvim-tree.lua]], false)
+-- Config for: which-key.nvim
+time([[Config for which-key.nvim]], true)
+try_loadstring("\27LJ\2\n¡\1\0\0\4\0\n\0\0176\0\0\0009\0\1\0+\1\2\0=\1\2\0006\0\0\0009\0\1\0)\1,\1=\1\3\0006\0\4\0'\2\5\0B\0\2\0029\0\6\0005\2\b\0005\3\a\0=\3\t\2B\0\2\1K\0\1\0\14operators\1\0\0\1\0\2\agc\rComments\fpresets\2\nsetup\14which-key\frequire\15timeoutlen\ftimeout\6o\bvim\0", "config", "which-key.nvim")
+time([[Config for which-key.nvim]], false)
+-- Config for: jfind.nvim
+time([[Config for jfind.nvim]], true)
+try_loadstring("\27LJ\2\n™\2\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\fexclude\1\0\4\vborder\frounded\14maxHeight\3(\rmaxWidth\3x\16formatPaths\2\1\18\0\0\t.git\n.idea\f.vscode\16.sass-cache\v.class\16__pycache__\17node_modules\vtarget\nbuild\btmp\vassets\tdist\vpublic\n*.iml\v*.meta\30*roc_rsp_gui_benchremote*\18*roc_cap_gui*\nsetup\njfind\frequire\0", "config", "jfind.nvim")
+time([[Config for jfind.nvim]], false)
+-- Config for: flash.nvim
+time([[Config for flash.nvim]], true)
+try_loadstring("\27LJ\2\nw\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\tchar\1\0\1\vlabels!etovxmpdygfblzhckisuranqwj/?\1\0\1\fenabled\1\nsetup\nflash\frequire\0", "config", "flash.nvim")
+time([[Config for flash.nvim]], false)
 -- Config for: harpoon
 time([[Config for harpoon]], true)
 try_loadstring("\27LJ\2\nT\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\tmenu\1\0\0\1\0\1\nwidth\3d\nsetup\fharpoon\frequire\0", "config", "harpoon")
 time([[Config for harpoon]], false)
--- Config for: which-key.nvim
-time([[Config for which-key.nvim]], true)
-try_loadstring("\27LJ\2\n¡\1\0\0\4\0\n\0\0176\0\0\0009\0\1\0+\1\2\0=\1\2\0006\0\0\0009\0\1\0)\1,\1=\1\3\0006\0\4\0'\2\5\0B\0\2\0029\0\6\0005\2\b\0005\3\a\0=\3\t\2B\0\2\1K\0\1\0\14operators\1\0\0\1\0\2\fpresets\2\agc\rComments\nsetup\14which-key\frequire\15timeoutlen\ftimeout\6o\bvim\0", "config", "which-key.nvim")
-time([[Config for which-key.nvim]], false)
--- Config for: noice.nvim
-time([[Config for noice.nvim]], true)
-try_loadstring("\27LJ\2\në\2\0\0\5\0\14\0\0176\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\0025\3\6\0=\3\a\0025\3\t\0005\4\b\0=\4\n\3=\3\v\0025\3\f\0=\3\r\2B\0\2\1K\0\1\0\fpresets\1\0\5\20command_palette\2\18bottom_search\1\19lsp_doc_border\1\15inc_rename\1\26long_message_to_split\2\blsp\roverride\1\0\0\1\0\3 cmp.entry.get_documentation\0021vim.lsp.util.convert_input_to_markdown_lines\2\"vim.lsp.util.stylize_markdown\2\rprogress\1\0\1\fenabled\1\14popupmenu\1\0\0\1\0\1\fbackend\bcmp\nsetup\nnoice\frequire\0", "config", "noice.nvim")
-time([[Config for noice.nvim]], false)
+-- Config for: trouble.nvim
+time([[Config for trouble.nvim]], true)
+try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\ftrouble\frequire\0", "config", "trouble.nvim")
+time([[Config for trouble.nvim]], false)
 -- Config for: ChatGPT.nvim
 time([[Config for ChatGPT.nvim]], true)
 try_loadstring("\27LJ\2\n}\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\1\17actions_path8/home/ubuntu/.config/nvim/lua/Farid/gptactions.json\nsetup\fchatgpt\frequire\0", "config", "ChatGPT.nvim")
 time([[Config for ChatGPT.nvim]], false)
+-- Config for: Comment.nvim
+time([[Config for Comment.nvim]], true)
+try_loadstring("\27LJ\2\n5\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\fComment\frequire\0", "config", "Comment.nvim")
+time([[Config for Comment.nvim]], false)
 
 _G._packer.inside_compile = false
 if _G._packer.needs_bufread == true then

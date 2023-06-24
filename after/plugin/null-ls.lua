@@ -11,5 +11,7 @@ null_ls.setup({
     sources = {
         formatting.stylua,
         formatting.prettier,
+        formatting.isort,
+        formatting.black,
     },
 })

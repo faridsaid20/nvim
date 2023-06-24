@@ -1,89 +1,91 @@
 -- Thi file can be loaded by calling `lua require('plugins')` from your init.vim
 -- Only required if you have packer configured as `opt`
-vim.cmd [[packadd packer.nvim]]
+vim.cmd([[packadd packer.nvim]])
 
-return require('packer').startup(function(use)
+return require("packer").startup(function(use)
     -- Packer can manage itself
-    use 'wbthomason/packer.nvim'
-    use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.1',
+    use("wbthomason/packer.nvim")
+    use({
+        "nvim-telescope/telescope.nvim",
+        tag = "0.1.1",
         -- or                            , branch = '0.1.x'
-        requires = { { 'nvim-lua/plenary.nvim' } }
-    }
+        requires = {
+            { "nvim-lua/plenary.nvim" },
+            { "nvim-telescope/telescope-live-grep-args.nvim" },
+            config = function()
+                require("telescope").load_extension("live_grep_args")
+            end,
+        },
+    })
 
-    use 'nvim-treesitter/nvim-treesitter-context' -- sticky headers
-    use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
-    use { 'theprimeagen/harpoon',
+    use("nvim-treesitter/nvim-treesitter-context") -- sticky headers
+    use("nvim-treesitter/nvim-treesitter", { run = ":TSUpdate" })
+    use({
+        "theprimeagen/harpoon",
         config = function()
             require("harpoon").setup({
                 menu = {
-                    width = 100
+                    width = 100,
                 },
             })
-        end
-    }
-    use('mbbill/undotree')    -- undo tree
-    use('tpope/vim-fugitive') -- git
-    use {
-        'VonHeikemen/lsp-zero.nvim',
-        branch = 'v2.x',
+        end,
+    })
+    use("mbbill/undotree") -- undo tree
+    use("tpope/vim-fugitive") -- git
+    use({
+        "VonHeikemen/lsp-zero.nvim",
+        branch = "v2.x",
         requires = {
             -- LSP Support
-            { 'neovim/nvim-lspconfig' }, -- Required
+            { "neovim/nvim-lspconfig" }, -- Required
             {
                 -- Optional
-                'williamboman/mason.nvim',
+                "williamboman/mason.nvim",
                 run = function()
-                    pcall(vim.cmd, 'MasonUpdate')
+                    pcall(vim.cmd, "MasonUpdate")
                 end,
             },
-            { 'williamboman/mason-lspconfig.nvim' }, -- Optional
+            { "williamboman/mason-lspconfig.nvim" }, -- Optional
 
             -- Autocompletion
-            { 'hrsh7th/nvim-cmp' },     -- Required
-            { 'hrsh7th/cmp-nvim-lsp' }, -- Required
-            { 'onsails/lspkind-nvim' }, -- Optional
-            { 'hrsh7th/cmp-buffer' },
-            { 'hrsh7th/cmp-path' },
-            { 'hrsh7th/cmp-nvim-lua' },
+            { "hrsh7th/nvim-cmp" }, -- Required
+            { "hrsh7th/cmp-nvim-lsp" }, -- Required
+            { "onsails/lspkind-nvim" }, -- Optional
+            { "hrsh7th/cmp-buffer" },
+            { "hrsh7th/cmp-path" },
+            { "hrsh7th/cmp-nvim-lua" },
 
             -- Snippets
-            { 'L3MON4D3/LuaSnip' },             -- Required
-            { 'rafamadriz/friendly-snippets' }, -- Optional
-            { 'saadparwaiz1/cmp_luasnip' },     -- Optional
-
-        }
-    }
-    use("github/copilot.vim") -- github copilot
-    use {
-        'phaazon/hop.nvim',   -- hop motion
-        branch = 'v2',        -- optional but strongly recommended
+            { "L3MON4D3/LuaSnip" },    -- Required
+            { "saadparwaiz1/cmp_luasnip" }, -- Optional
+        },
+    })
+    use({
+        "pmizio/typescript-tools.nvim",
+        requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    })
+    use { "zbirenbaum/copilot.lua" }
+    use({
+        "numToStr/Comment.nvim", -- toggle comments
         config = function()
-            -- you can configure Hop the way you like here; see :h hop-config
-            require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
-        end
-    }
-    use {
-        'numToStr/Comment.nvim', -- toggle comments
-        config = function()
-            require('Comment').setup()
-        end
-    }
-    use {
-        'nvim-tree/nvim-tree.lua', -- file tree
+            require("Comment").setup()
+        end,
+    })
+    use({
+        "nvim-tree/nvim-tree.lua", -- file tree
         requires = {
-            'nvim-tree/nvim-web-devicons',
+            "nvim-tree/nvim-web-devicons",
         },
 
         config = function()
-            require("nvim-tree").setup {}
-        end
-    }
-    use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' } -- diffview
-    use "jose-elias-alvarez/null-ls.nvim"                                -- required
-    use 'nvim-lualine/lualine.nvim'                                      -- statusline
+            require("nvim-tree").setup({})
+        end,
+    })
+    use({ "sindrets/diffview.nvim", requires = "nvim-lua/plenary.nvim" }) -- diffview
+    use("jose-elias-alvarez/null-ls.nvim")                             -- required
+    use("nvim-lualine/lualine.nvim")                                   -- statusline
 
-    use 'eandrju/cellular-automaton.nvim'                                -- party time
+    use("eandrju/cellular-automaton.nvim")                             -- party time
     -- Packer
     use({
         "folke/noice.nvim", -- noice is a nice way to configure Neovim
@@ -105,13 +107,16 @@ return require('packer').startup(function(use)
                         ["cmp.entry.get_documentation"] = true,
                     },
                 },
+                messages = {
+                    enabled = false,
+                },
                 -- you can enable a preset for easie rconfiguration
                 presets = {
-                    bottom_search = false,        -- use a classic bottom cmdline for search
-                    command_palette = true,       -- position the cmdline and popupmenu together
+                    bottom_search = false, -- use a classic bottom cmdline for search
+                    command_palette = true, -- position the cmdline and popupmenu together
                     long_message_to_split = true, -- long messages will be sent to a split
-                    inc_rename = false,           -- enables an input dialog for inc-rename.nvim
-                    lsp_doc_border = false,       -- add a border to hover docs and signature help
+                    inc_rename = false, -- enables an input dialog for inc-rename.nvim
+                    lsp_doc_border = false, -- add a border to hover docs and signature help
                 },
             })
         end,
@@ -122,23 +127,57 @@ return require('packer').startup(function(use)
             --   `nvim-notify` is only needed, if you want to use the notification view.
             --   If not available, we use `mini` as the fallback
             "rcarriga/nvim-notify",
-        }
+        },
     })
-    use { 'mg979/vim-visual-multi', branch = 'master' } -- multiple cursors
+    use({ "mg979/vim-visual-multi", branch = "master" }) -- multiple cursors
     -- Lua
-    use {
+    use({
         "folke/which-key.nvim",
         config = function()
             vim.o.timeout = true
             vim.o.timeoutlen = 300
-            require("which-key").setup {
+            require("which-key").setup({
                 -- your configuration comes here
                 -- or leave it empty to use the default settings
                 -- refer to the configuration section below
                 operators = { gc = "Comments", presets = true },
-            }
-        end
-    }
+            })
+        end,
+    })
+    use({
+        "jake-stewart/jfind.nvim",
+        branch = "1.0",
+        config = function()
+            require("jfind").setup({
+                exclude = {
+                    ".git",
+                    ".idea",
+                    ".vscode",
+                    ".sass-cache",
+                    ".class",
+                    "__pycache__",
+                    -- "*.cache*",
+                    "node_modules",
+                    "target",
+                    "build",
+                    "tmp",
+                    "assets",
+                    "dist",
+                    "public",
+                    "*.iml",
+                    "*.meta",
+                    -- "../",
+                    "*roc_rsp_gui_benchremote*",
+                    "*roc_cap_gui*",
+                },
+                border = "rounded",
+                formatPaths = true,
+                -- key = " pp",
+                maxWidth = 120,
+                maxHeight = 40,
+            })
+        end,
+    })
     -- Packer
     use({
         "/home/ubuntu/.config/nvim/ChatGPT.nvim",
@@ -150,43 +189,62 @@ return require('packer').startup(function(use)
         requires = {
             "MunifTanjim/nui.nvim",
             "nvim-lua/plenary.nvim",
-            "nvim-telescope/telescope.nvim"
-        }
+            "nvim-telescope/telescope.nvim",
+        },
     })
-    use {
+    use({
         "windwp/nvim-autopairs", -- autopairs for nvim written by lua
-        config = function() require("nvim-autopairs").setup {} end
-    }
-    use {
-        'lewis6991/gitsigns.nvim',
-    }
-    use 'Mofiqul/vscode.nvim'
-    use 'tomasiser/vim-code-dark'
-    -- use { "olimorris/onedarkpro.nvim",
-    -- }
-    -- Using Packer
-    use 'navarasu/onedark.nvim'
-    use "lukas-reineke/indent-blankline.nvim" -- highlight scope lines
-    use "RRethy/vim-illuminate"               -- highlight other uses of the word under the cursor
-    use {
-        'rmagatti/goto-preview',              -- preview definition
         config = function()
-            require('goto-preview').setup {}
-        end
-    }
+            require("nvim-autopairs").setup({})
+        end,
+    })
+    use({
+        "lewis6991/gitsigns.nvim",
+    })
+    use("navarasu/onedark.nvim")
+    use("lukas-reineke/indent-blankline.nvim") -- highlight scope lines
+    use("RRethy/vim-illuminate")            -- highlight other uses of the word under the cursor
+    use({
+        "rmagatti/goto-preview",            -- preview definition
+        config = function()
+            require("goto-preview").setup({})
+        end,
+    })
     -- Lua
-    use {
+    use({
         "folke/trouble.nvim", -- preview definition
         requires = "nvim-tree/nvim-web-devicons",
         config = function()
-            require("trouble").setup {
+            require("trouble").setup({
                 -- your configuration comes here
                 -- or leave it empty to use the default settings
                 -- refer to the configuration section below
-            }
-        end
-    }
-    use { 'kevinhwang91/nvim-bqf' }   -- quickfix preview window
-    use { "windwp/nvim-ts-autotag" }  -- auto close tags
-    use 'norcalli/nvim-colorizer.lua' -- colorize hex colors
+            })
+        end,
+    })
+    use({
+        "folke/flash.nvim",
+        config = function()
+            require("flash").setup({
+                char = {
+                    enabled = false,
+                },
+                labels = "etovxmpdygfblzhckisuranqwj/?",
+            })
+        end,
+    })
+    use({ "kevinhwang91/nvim-bqf" }) -- quickfix preview window
+    use({ "windwp/nvim-ts-autotag" }) -- auto close tags
+    use("norcalli/nvim-colorizer.lua") -- colorize hex colors
+    use({ "akinsho/bufferline.nvim", tag = "*", requires = "nvim-tree/nvim-web-devicons" })
+    use({ "echasnovski/mini.ai", branch = "stable" })
+    use({
+        "kylechui/nvim-surround",
+        tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+        config = function()
+            require("nvim-surround").setup({
+                -- Configuration here, or leave empty to use defaults
+            })
+        end,
+    })
 end)
