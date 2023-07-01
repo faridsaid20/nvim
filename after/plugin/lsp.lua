@@ -5,7 +5,6 @@ local lspkind = require("lspkind")
 lsp.preset("recommended")
 
 lsp.ensure_installed({
-	"eslint",
 	"rust_analyzer",
 })
 require("typescript-tools").setup({
@@ -34,10 +33,10 @@ require("typescript-tools").setup({
 lsp.nvim_workspace()
 
 local cmp = require("cmp")
-local cmp_select = {behavior = cmp.SelectBehavior.Select}
+local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_mappings = lsp.defaults.cmp_mappings({
-	['<Up>'] = cmp.mapping.select_prev_item(cmp_select),
-	['<Down>'] = cmp.mapping.select_next_item(cmp_select),
+	["<Up>"] = cmp.mapping.select_prev_item(cmp_select),
+	["<Down>"] = cmp.mapping.select_next_item(cmp_select),
 	["<CR>"] = cmp.mapping.confirm({ select = true }),
 	["<C-Space>"] = cmp.mapping.complete(),
 	["<C-e>"] = cmp.mapping.close(),
@@ -81,6 +80,19 @@ require("lspconfig").clangd.setup({
 		"--offset-encoding=utf-16",
 	},
 })
+cmp.setup.cmdline(":", {
+	mapping = cmp.mapping.preset.cmdline(),
+	sources = cmp.config.sources({
+		{ name = "path" },
+	}, {
+		{
+			name = "cmdline",
+			option = {
+				ignore_cmds = { "Man", "!" },
+			},
+		},
+	}),
+})
 lsp.setup_nvim_cmp({
 	mapping = cmp_mappings,
 	sources = {
@@ -116,7 +128,12 @@ lsp.set_preferences({
 })
 lsp.on_attach(function(client, bufnr)
 	local opts = { buffer = bufnr, remap = false }
-
+	local null_ls_formatting_available = false
+	local sources_loaded, null_ls_sources = pcall(require, "null-ls.sources")
+	if sources_loaded then
+		local null_ls_formatting_sources = null_ls_sources.get_available(vim.bo.filetype, "NULL_LS_FORMATTING")
+		null_ls_formatting_available = #null_ls_formatting_sources ~= 0
+	end
 	wk.register({
 		v = {
 			name = "lsp", -- optional group name
@@ -149,6 +166,21 @@ lsp.on_attach(function(client, bufnr)
 				opts,
 			}, -- create a binding with label
 		},
+		f = {
+			function()
+				vim.lsp.buf.format({
+					filter = function(format_client)
+						if format_client.name == "null-ls" then
+							return null_ls_formatting_available
+						else
+							return true
+						end
+					end,
+				})
+			end,
+			"Format",
+			opts,
+		},
 	}, { prefix = "<leader>" })
 
 	vim.keymap.set("n", "gd", function()
@@ -175,4 +207,3 @@ lsp.setup()
 vim.diagnostic.config({
 	virtual_text = true,
 })
-

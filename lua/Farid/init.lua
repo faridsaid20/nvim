@@ -9,22 +9,8 @@ vim.cmd [[
 vim.cmd [[
 augroup custom_keymaps
     autocmd!
-    " autocmd VimEnter * nnoremap <C-e> $
-    " autocmd VimEnter * inoremap <C-e> $
-    " autocmd VimEnter * vnoremap <C-e> $
-    " autocmd VimEnter * nnoremap <C-m> 0
-    " autocmd VimEnter * inoremap <C-m> 0
-    " autocmd VimEnter * noremap a i
-    " autocmd VimEnter * noremap m h
-    " autocmd VimEnter * noremap n j
-    " autocmd VimEnter * noremap e k
-    " autocmd VimEnter * noremap i l
-
-    " autocmd VimEnter * nnoremap <C-Z> <Nop>
-
     autocmd VimEnter * nnoremap <C-A> <C-O>
-   " autocmd VimEnter * vnoremap <C-m> 0
-    " autocmd VimEnter * nnoremap rs :Telescope lsp_references<CR>
+    autocmd VimEnter * set cmdheight=1
 augroup END
 ]]
 
@@ -41,3 +27,5 @@ augroup custom_cursor
     autocmd VimEnter * set guicursor+=v:block-Cursor
 augroup END
 ]]
+
+vim.cmd [[ autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false}) ]]

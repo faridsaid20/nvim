@@ -2,7 +2,7 @@
 require('nvim-ts-autotag').setup()
 require 'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all" (the five listed parsers should always be installed)
-    ensure_installed = { "javascript", "typescript", "tsx", "c", "lua", "vim", "vimdoc", "query" },
+    ensure_installed = { "javascript", "typescript", "tsx", "c", "lua", "vim", "vimdoc", "query", "json", "yaml", "dockerfile", "cpp", "cmake" },
 
 
     -- Install parsers synchronously (only applied to `ensure_installed`)
@@ -13,6 +13,9 @@ require 'nvim-treesitter.configs'.setup {
     auto_install = true,
 
     autotag = {
+        enable = true,
+    },
+    indent = {
         enable = true,
     },
     highlight = {

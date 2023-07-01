@@ -14,8 +14,7 @@ require("harpoon").setup({
 		width = math.floor(vim.api.nvim_win_get_width(0) * 0.8),
 	},
 })
-
-
+local flash = require("flash")
 wk.register({
 	p = {
 		name = "telescope/gpt", -- optional group name
@@ -46,6 +45,14 @@ wk.register({
 		name = "search/replace",
 		r = { vim.lsp.buf.rename, "rename all occurences" },
 		s = { [[*]], "Search in current buff" },
+		w = {
+			function()
+				flash.jump({
+					pattern = vim.fn.expand("<cword>"),
+				})
+			end,
+			"Flash word under cursor",
+		},
 		g = { live_grep_args_shortcuts.grep_word_under_cursor, "Grep in workspace" },
 		f = { builtin.current_buffer_fuzzy_find, "Fuzzy fund in current buffer" },
 	},
@@ -62,7 +69,7 @@ wk.register({
 		n = { ":bnext<CR>", "Next buffer" },
 		p = { ":bprevious<CR>", "Previous buffer" },
 		f = { ":bfirst<CR>", "First buffer" },
-		l = { ":blast<CR>", "Last buffer"},
+		l = { ":blast<CR>", "Last buffer" },
 	},
 	g = {
 		name = "git",
@@ -92,20 +99,20 @@ wk.register({
 		w = { "<cmd>bufdo write<CR>", "Save all" },
 		q = { "<cmd>wq<CR>", "Save and quit" },
 		a = { "<cmd>wqa<CR>", "Save all and quit" },
+		s = { "<C-w>s", "Create horizontal window" },
+		v = { "<C-w>v", "Create vertical window" },
 		name = "Save and quit",
 	},
-	f = { vim.lsp.buf.format, "Format" },
 	qq = { "<cmd>q!<CR>", "Quit without saving" },
 	q = { "<cmd>q<CR>", "Quit" },
 	a = { mark.add_file, "Harpoon add" },
 	h = { name = "gitSigns" },
-	n = { "<C-w>h", "Next window", nowait = true },
-	e = { "<C-w>l", "Previous window", nowait = true },
 }, { prefix = "<leader>" })
 
-keymap("o", "r", function()
-  require("flash").remote()
-end, { silent = true, noremap = true })
+keymap("n", "<leader><Down>", "<C-W><C-J>", { silent = true, noremap = true })
+keymap("n", "<leader><Up>", "<C-W><C-K>", { silent = true, noremap = true })
+keymap("n", "<leader><Left>", "<C-W><C-H>", { silent = true, noremap = true })
+keymap("n", "<leader><Right>", "<C-W><C-L>", { silent = true, noremap = true })
 
 -- Context specific bindings
 -- Lua
@@ -115,10 +122,42 @@ keymap("n", "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>", { silen
 keymap("n", "<leader>xl", "<cmd>TroubleToggle loclist<cr>", { silent = true, noremap = true })
 keymap("n", "<leader>xq", "<cmd>TroubleToggle quickfix<cr>", { silent = true, noremap = true })
 --
+keymap("o", "r", function()
+	require("flash").remote()
+end)
+
+keymap("o", "R", function()
+	require("flash").treesitter_search()
+end)
+
+keymap("x", "R", function()
+	require("flash").treesitter_search()
+end)
+
 keymap("n", "s", "<cmd>lua require('flash').jump()<CR>", { silent = true, noremap = true })
+keymap("x", "s", "<cmd>lua require('flash').jump()<CR>", { silent = true, noremap = true })
+keymap("o", "s", "<cmd>lua require('flash').jump()<CR>", { silent = true, noremap = true })
 keymap("n", "S", "<cmd>lua require('flash').treesitter()<CR>", { silent = true, noremap = true })
-keymap("n", "S", "<cmd>lua require('flash').treesitter()<CR>", { silent = true, noremap = true })
---
+keymap("o", "S", "<cmd>lua require('flash').treesitter()<CR>", { silent = true, noremap = true })
+keymap("x", "S", "<cmd>lua require('flash').treesitter()<CR>", { silent = true, noremap = true })
+keymap("n", "<leader>sw", function()
+	require("flash").jump({
+		pattern = ".", -- initialize pattern with any char
+		search = {
+			mode = function(pattern)
+				-- remove leading dot
+				if pattern:sub(1, 1) == "." then
+					pattern = pattern:sub(2)
+				end
+				-- return word pattern and proper skip pattern
+				return ([[\v<%s\w*>]]):format(pattern), ([[\v<%s]]):format(pattern)
+			end,
+		},
+		-- select the range
+		jump = { pos = "range" },
+	})
+end, { silent = true, noremap = true, desc = "Flash select word" })
+
 -- {
 -- s",
 -- mode = { "n", "x", "o" },
@@ -186,7 +225,7 @@ keymap("n", "n", "nzzzv")
 keymap("n", "N", "Nzzzv")
 
 keymap("n", "<C-l>", "<C-d>zz")
-keymap("n", "<C-p>", "<C-u>zz")
+-- keymap("n", "<C-p>", "<C-u>zz")
 
 keymap("n", "d", '"_d', silent)
 keymap("n", "D", '"_D', silent)
@@ -220,10 +259,12 @@ keymap("n", "Q", "<nop>")
 keymap("n", "<C-s>", ":w<CR>", silent)
 keymap("i", "<C-s>", "<ESC> :w<CR>", silent)
 
-keymap("n", "<C-k>", "<cmd>cnext<CR>zz")
--- keymap("n", "<C-h>", "<cmd>cprev<CR>zz")
+keymap("n", "<S-m>", "<cmd>cnext<CR>zz")
+keymap("n", "<S-e>", "<cmd>cprev<CR>zz")
+keymap("n", "<C-K>", "<cmd>copen<CR>zz")
 keymap("n", "<leader>k", "<cmd>lnext<CR>zz")
 keymap("n", "<leader>j", "<cmd>lprev<CR>zz")
+
 keymap("n", "gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", { noremap = true, nowait = true })
 keymap(
 	"n",
@@ -231,11 +272,17 @@ keymap(
 	"<cmd>lua require('goto-preview').goto_preview_type_definition()<CR>",
 	{ noremap = true, nowait = true }
 )
-keymap("n", "<leader>rp", "<cmd>lua require('goto-preview').goto_preview_references()<CR>", { silent = true, noremap = true, nowait = true })
+keymap(
+	"n",
+	"<leader>rp",
+	"<cmd>lua require('goto-preview').goto_preview_references()<CR>",
+	{ silent = true, noremap = true, nowait = true }
+)
 
-keymap("n", "<leader>rs", "<cmd>Telescope lsp_references<CR>", { noremap = true, nowait = true, silent = true })
-
-    -- autocmd VimEnter * nnoremap rs :Telescope lsp_references<CR>
+-- show references of word under cursor
+keymap("n", "<leader>rs", function()
+	builtin.lsp_references({ fname_width = 100 })
+end, { noremap = true, nowait = true, silent = true })
 
 keymap(
 	"n",
@@ -254,15 +301,55 @@ keymap("n", "<C-b>", ui.toggle_quick_menu)
 keymap("n", "<C-h>", "<cmd>ClangdSwitchSourceHeader<CR>", silent)
 -- {'n', 'v', 'x', 's', 'o', 'i', 'c', 't'}
 vim.keymap.set("n", "<leader>pp", function()
-    jfind.findFile({
-        formatPaths = true,
-        hidden = true,
-        callback = {
-            [key.DEFAULT] = vim.cmd.edit,
-            [key.CTRL_S] = vim.cmd.split,
-            [key.CTRL_V] = vim.cmd.vsplit,
-        }
-    })
+	jfind.findFile({
+		formatPaths = true,
+		hidden = true,
+		preview = true,
+		previewPosition = "right",
+		wrap_item_list = true,
+		callback = {
+			[key.DEFAULT] = vim.cmd.edit,
+			[key.CTRL_S] = vim.cmd.split,
+			[key.CTRL_V] = vim.cmd.vsplit,
+		},
+	})
+end)
+
+vim.keymap.set("i", "<c-t>", function()
+	jfind.jfind({
+		input = { 1, 2, 3, 4, 5 },
+		preview = "figlet",
+		previewPosition = "right",
+		callback = function(result)
+			print("result: " .. result)
+		end,
+	})
+end)
+local preview
+if vim.fn.executable("bat") == 1 then
+	preview = "bat --color always --theme ansi --style plain"
+else
+	preview = "cat"
+end
+preview = preview .. " $(echo {} | awk -F: '{print $1}')"
+vim.keymap.set("n", "<leader>pl", function()
+	jfind.jfind({
+		exclude = { "*.hpp" }, -- overrides setup excludes
+		hidden = true, -- grep hidden files/directories
+		caseSensitivity = "smart", -- sensitive, insensitive, smart
+		--     will use vim settings by default
+		preview = preview,
+		query = "",
+		formatPaths = true,
+		previewPosition = "right",
+		history = "~/.cache/jfind_live_grep_args_history",
+		command = "bash -c 'rg '{}",
+		callback = {
+			[key.DEFAULT] = jfind.editGotoLine,
+			[key.CTRL_B] = jfind.splitGotoLine,
+			[key.CTRL_N] = jfind.vsplitGotoLine,
+		},
+	})
 end)
 
 keymap("n", "<C-z>", function()
@@ -384,3 +471,4 @@ require("gitsigns").setup({
 	end,
 })
 
+--flash

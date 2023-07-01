@@ -2,8 +2,6 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.nvim_tree_respect_buf_cwd = 1
 vim.g.nvim_tree_view_flat = 1
--- empty setup using defaults
-require("nvim-tree").setup()
 
 -- OR setup with some options
 require("nvim-tree").setup({
@@ -24,6 +22,5 @@ require("nvim-tree").setup({
     },
     git = {
         enable = false,
-        ignore = {},
     },
 })
