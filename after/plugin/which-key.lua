@@ -76,7 +76,8 @@ wk.register({
 		f = { builtin.git_files, "Git files" },
 		g = { "<cmd>Git<CR>", "Git" },
 		s = { "<cmd>Git status<CR>", "Git status" },
-		c = { "<cmd>Git commit<CR>", "Git commit" },
+		-- c = { "<cmd>Git commit<CR>", "Git commit" },
+		c = { "<cmd>DiffviewClose<CR>", "Git diff" },
 		p = { "<cmd>Git push -f<CR>", "Git push" },
 		-- f = { "<cmd>Git fetch<CR>", "Git fetch" },
 		b = { "<cmd>Git blame<CR>", "Git blame" },
@@ -84,7 +85,6 @@ wk.register({
 		d = { "<cmd>DiffviewOpen<CR>", "Git diff" },
 		r = { "<cmd>Git rebase<CR>", "Git rebase" },
 		m = { "<cmd>Git mergetool<CR>", "Git mergetool" },
-		t = { "<cmd>GitGutterToggle<CR>", "GitGutterToggle" },
 	},
 	m = {
 		name = "Party time",
@@ -185,7 +185,7 @@ end)
 
 local api = vim.api
 
--- keymap("n", "<CR>", ":noh<CR>", silent)
+keymap("n", "<ESC>", ":noh<CR>", silent)
 
 function PopupTerminal()
 	local buf = api.nvim_create_buf(false, true)
@@ -219,12 +219,15 @@ end
 keymap("v", "E", ":m '>+1<CR>gv=gv", { silent = true, nowait = true, noremap = true })
 keymap("v", "N", ":m '<-2<CR>gv=gv", { silent = true, nowait = true, noremap = true })
 keymap("n", "J", "mzJ`z")
-keymap("n", "<C-d>", "<C-d>zz")
+
+keymap("n","<PageUp>", "<C-u>zz")
+keymap("n","<PageDown>", "<C-d>zz")
+
 -- keymap("n", "<C-u>", "<C-u>zz")
 keymap("n", "n", "nzzzv")
 keymap("n", "N", "Nzzzv")
 
-keymap("n", "<C-l>", "<C-d>zz")
+-- keymap("n", "<C-l>", "<C-d>zz")
 -- keymap("n", "<C-p>", "<C-u>zz")
 
 keymap("n", "d", '"_d', silent)
@@ -240,8 +243,8 @@ keymap("v", "X", '"_X', silent)
 
 keymap("v", "<C-e>", "$")
 keymap("n", "<C-e>", "$")
-vim.api.nvim_set_keymap("v", "<CR>", ":lua JumpToLineStartAndClearHighlights()<CR>", { silent = true, noremap = true })
-vim.api.nvim_set_keymap("n", "<CR>", ":lua JumpToLineStartAndClearHighlights()<CR>", { silent = true, noremap = true })
+keymap("v", "<C-m>", ":lua jumptolinestartandclearhighlights()<CR>", { silent = true, noremap = true })
+keymap("n", "<C-m>", ":lua JumpToLineStartAndClearHighlights()<CR>", { silent = true, noremap = true })
 function JumpToLineStartAndClearHighlights()
 	vim.cmd("normal! ^")
 	vim.cmd("silent! noh")
@@ -255,9 +258,9 @@ keymap("v", "p", '"_dP', silent)
 keymap("i", "<C-c>", "<Esc>")
 
 keymap("n", "Q", "<nop>")
--- Save file by CTRL-S
-keymap("n", "<C-s>", ":w<CR>", silent)
-keymap("i", "<C-s>", "<ESC> :w<CR>", silent)
+-- Save file by ESC
+keymap("n", "<ESC>", ":w<CR>", silent)
+keymap("i", "<ESC>", "<ESC>:w<CR>", silent)
 
 keymap("n", "<S-m>", "<cmd>cnext<CR>zz")
 keymap("n", "<S-e>", "<cmd>cprev<CR>zz")
@@ -341,6 +344,7 @@ vim.keymap.set("n", "<leader>pl", function()
 		preview = preview,
 		query = "",
 		formatPaths = true,
+		wrap_item_list = true,
 		previewPosition = "right",
 		history = "~/.cache/jfind_live_grep_args_history",
 		command = "bash -c 'rg '{}",
@@ -471,4 +475,61 @@ require("gitsigns").setup({
 	end,
 })
 
---flash
+local function get_file_type()
+	local file_ext = vim.fn.expand("%:e")
+	if file_ext == "js" or file_ext == "jsx" or file_ext == "ts" or file_ext == "tsx" then
+		return "javascript"
+	elseif file_ext == "cpp" or file_ext == "h" then
+		return "cpp"
+	end
+	return "unknown"
+end
+keymap({ "n", "i" }, "<C-l>", function()
+	local file_name = vim.fn.expand("%:t")
+	local word = vim.fn.expand("<cword>")
+	local file_type = get_file_type()
+
+	local indent = vim.fn.indent(".")
+	local indent_spaces = string.rep(" ", indent)
+    require("logsitter").log()
+
+	-- if file_type == "javascript" then
+		-- local log_statement = string.format('%sconsole.log("%s, %s: ", %s);', indent_spaces, file_name, word, word)
+		-- vim.api.nvim_put({ log_statement }, "l", true, true)
+	-- elseif file_type == "cpp" then
+		-- local log_statement = string.format('%sRFC_printf("%s %s: %%d", %s);', indent_spaces, file_name, word, word)
+		-- if vim.fn.search("std::string\\s*" .. word, "nw") ~= 0 then
+			-- log_statement =
+				-- string.format('%sRFC_printf("%s %s: %%s", %s.c_str());', indent_spaces, file_name, word, word)
+		-- elseif vim.fn.search("\\s*float\\s*" .. word .. "\\|\\s*double\\s*" .. word, "nw") ~= 0 then
+			-- log_statement = string.format('%sRFC_printf("%s %s: %%f", %s);', indent_spaces, file_name, word, word)
+		-- end
+		-- vim.api.nvim_put({ log_statement }, "l", true, true)
+	-- end
+end, { silent = true, noremap = true })
+
+
+function _G.set_terminal_keymaps()
+  local opts = {buffer = 0}
+  vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+  vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
+  vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
+  vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
+  vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
+  vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
+  vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
+end
+
+
+-- if you only want these mappings for toggle term use term://*toggleterm#* instead
+vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+
+
+local Terminal  = require('toggleterm.terminal').Terminal
+local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float", float_opts = { border = "double" } })
+
+function _Lazygit_toggle()
+  lazygit:toggle()
+end
+
+vim.api.nvim_set_keymap("n", "<leader>gt", "<cmd>lua _Lazygit_toggle()<CR>", {noremap = true, silent = true})
