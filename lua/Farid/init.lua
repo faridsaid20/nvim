@@ -10,6 +10,8 @@ vim.cmd [[
 augroup custom_keymaps
     autocmd!
     autocmd VimEnter * nnoremap <C-A> <C-O>
+
+    autocmd VimEnter * inoremap <C-t> <Nop>
     autocmd VimEnter * set cmdheight=1
 augroup END
 ]]

@@ -12,7 +12,6 @@ local new_colors = {
 	blue = "#61D1FF",
 	red = "#e86671",
 }
-
 -- nightfly.normal.a.bg = new_colors.blue
 -- nightfly.insert.a.bg = new_colors.green
 -- nightfly.visual.a.bg = new_colors.violet
@@ -25,9 +24,12 @@ local new_colors = {
 -- }
 -- }
 
+nightfly.normal.c.bg = nil
+nightfly.inactive.c.bg = nil
 lualine.setup({
 	options = {
 		theme = nightfly,
+		disabled_filetypes = { "packer", "NvimTree" },
 	},
 	sections = {
 		lualine_b = {
@@ -35,13 +37,20 @@ lualine.setup({
 				"branch",
 				"diff",
 				"diagnostics",
-				color = {
-					-- bg = "red",
-					-- bg = "transparent",
-					-- gui = "bold",
-				},
 			},
 		},
-		lualine_c = { { "filename", path = 1 } },
+		lualine_c = {
+			{
+				"filename",
+				path = 3,
+			},
+		},
+	},
+	inactive_sections = {
+		lualine_a = { "mode" },
+		lualine_c = { "filename" },
+		lualine_x = { "encoding", "fileformat", "filetype" },
+		lualine_y = { "progress" },
+		lualine_z = { "location" },
 	},
 })

@@ -30,7 +30,6 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use("mbbill/undotree") -- undo tree
-	use("tpope/vim-fugitive") -- git
 	use({
 		"VonHeikemen/lsp-zero.nvim",
 		branch = "v2.x",
@@ -58,6 +57,7 @@ return require("packer").startup(function(use)
 			{ "saadparwaiz1/cmp_luasnip" }, -- Optional
 		},
 	})
+	use("rafamadriz/friendly-snippets")
 	use("nvim-lua/plenary.nvim")
 	use({
 		"pmizio/typescript-tools.nvim",
@@ -90,16 +90,38 @@ return require("packer").startup(function(use)
 						enabled = false,
 					},
 				},
-				highlight = {
-					label = {
-						rainbow = {
-							enabled = true,
-							-- number between 1 and 9
-							shade = 5,
-						},
+				label = {
+					rainbow = {
+						enabled = true,
+						-- number between 1 and 9
+						shade = 5,
 					},
 				},
 				-- labels = "etovxmpdygfblzhckisuranqwj/?",
+			})
+		end,
+	})
+	use({
+		"ThePrimeagen/refactoring.nvim",
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "nvim-treesitter/nvim-treesitter" },
+		},
+		config = function()
+			require("refactoring").setup({
+				prompt_func_return_type = {
+					go = true,
+					cpp = true,
+					c = true,
+					java = true,
+				},
+				-- prompt for function parameters
+				prompt_func_param_type = {
+					go = true,
+					cpp = true,
+					c = true,
+					java = true,
+				},
 			})
 		end,
 	})
@@ -193,25 +215,12 @@ return require("packer").startup(function(use)
 		"lewis6991/gitsigns.nvim",
 	})
 	use("navarasu/onedark.nvim")
-	use("folke/tokyonight.nvim")
 	use("lukas-reineke/indent-blankline.nvim") -- highlight scope lines
 	use("RRethy/vim-illuminate") -- highlight other uses of the word under the cursor
 	use({
 		"rmagatti/goto-preview", -- preview definition
 		config = function()
 			require("goto-preview").setup({})
-		end,
-	})
-	-- Lua
-	use({
-		"folke/trouble.nvim", -- preview definition
-		requires = "nvim-tree/nvim-web-devicons",
-		config = function()
-			require("trouble").setup({
-				-- your configuration comes here
-				-- or leave it empty to use the default settings
-				-- refer to the configuration section below
-			})
 		end,
 	})
 	use({ "kevinhwang91/nvim-bqf" }) -- quickfix preview window
@@ -229,4 +238,5 @@ return require("packer").startup(function(use)
 			})
 		end,
 	})
+	use("ThePrimeagen/vim-be-good")
 end)

@@ -1,4 +1,3 @@
-local wk = require("which-key")
 local lsp = require("lsp-zero")
 local lspkind = require("lspkind")
 local luasnip = require("luasnip")
@@ -8,6 +7,14 @@ lsp.preset("recommended")
 lsp.ensure_installed({
 	"rust_analyzer",
 })
+require'lspconfig'.cssmodules_ls.setup {
+    -- provide your on_attach to bind keymappings
+    on_attach = custom_on_attach,
+    -- optionally
+    init_options = {
+        camelCase = false,
+    },
+}
 require("typescript-tools").setup({
 	on_attach = function(client)
 		client.server_capabilities.documentFormattingProvider = false
@@ -20,7 +27,7 @@ require("typescript-tools").setup({
 		publish_diagnostic_on = "insert_leave",
 		-- specify a list of plugins to load by tsserver, e.g., for support `styled-components`
 		-- (see 💅 `styled-components` support section)
-		tsserver_plugins = { "@styled/typescript-styled-plugin" },
+		tsserver_plugins = { "@styled/typescript-styled-plugin", "typescript-plugin-css-modules" },
 		-- described below
 		tsserver_format_options = {},
 		tsserver_file_preferences = {
@@ -43,14 +50,14 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 	["<Down>"] = cmp.mapping.select_next_item(cmp_select),
 	["<CR>"] = cmp.mapping.confirm({ select = true }),
 	["<C-Space>"] = cmp.mapping.complete(),
+    ["<C-y>"] = cmp.mapping(function(fallback)
+      if luasnip.expand_or_locally_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
 	["<C-e>"] = cmp.mapping.close(),
-	["<C-y>"] = cmp.mapping(function(fallback)
-		if luasnip.expand_or_jumpable() then
-			luasnip.expand_or_jump()
-		else
-			fallback()
-		end
-	end, { "i", "s" }),
 })
 
 cmp_mappings["<Tab>"] = nil
@@ -143,14 +150,32 @@ lsp.set_preferences({
 		info = "I",
 	},
 })
+
+local function goToDefinition(bufnr)
+	-- Get all clients attached to the buffer
+	local clients = vim.lsp.buf_get_clients(bufnr)
+	-- Print the client names
+	local isTs = false
+	for _, client in ipairs(clients) do
+		if client.name == "typescript-tools" then
+			isTs = true
+		end
+	end
+	if isTs then
+		vim.cmd("TSToolsGoToSourceDefinition")
+	else
+		vim.lsp.buf.definition()
+	end
+end
+
 local function format(buf)
 	local null_ls_sources = require("null-ls.sources")
 	local ft = vim.bo[buf].filetype
-
 	local has_null_ls = #null_ls_sources.get_available(ft, "NULL_LS_FORMATTING") > 0
 
 	vim.lsp.buf.format({
 		bufnr = buf,
+		async = true,
 		filter = function(client)
 			if has_null_ls then
 				return client.name == "null-ls"
@@ -161,50 +186,32 @@ local function format(buf)
 	})
 end
 
+local keymap = function(mode, key, action, desc, buffer)
+	vim.keymap.set(mode, key, action, { noremap = true, silent = true, desc = desc, buffer = buffer })
+end
+
 lsp.on_attach(function(client, bufnr)
 	local opts = { buffer = bufnr, remap = false }
-	wk.register({
-		v = {
-			name = "lsp", -- optional group name
-			w = {
-				function()
-					vim.lsp.buf.workspace_symbol()
-				end,
-				"Workspace symbol",
-				opts,
-			},
-			d = {
-				function()
-					vim.diagnostic.open_float()
-				end,
-				"diagnostic",
-				opts,
-			},
-			a = {
-				function()
-					vim.lsp.buf.code_action()
-				end,
-				"Code action",
-				opts,
-			},
-			r = {
-				function()
-					vim.lsp.buf.rename()
-				end,
-				"Rename",
-				opts,
-			}, -- create a binding with label
-		},
-		f = {
-			function()
-				format(bufnr)
-			end,
-			"Format",
-			opts,
-		},
-	}, { prefix = "<leader>" })
+	keymap("n", "<leader>vw", function()
+		vim.lsp.buf.workspace_symbol()
+	end, "Workspace symbol", bufnr)
+	keymap("n", "<leader>vd", function()
+		vim.diagnostic.open_float()
+	end, "Diagnostic", bufnr)
+	keymap("n", "<leader>va", function()
+		vim.lsp.buf.code_action()
+	end, "Code action", bufnr)
+	keymap("n", "<leader>vr", function()
+		vim.lsp.buf.rename()
+	end, "Rename", bufnr)
+	keymap("n", "<leader>f", function()
+		format(bufnr)
+	end, "Format", bufnr)
 
 	vim.keymap.set("n", "gd", function()
+		goToDefinition(bufnr)
+	end, opts)
+	vim.keymap.set("n", "gs", function()
 		vim.lsp.buf.definition()
 	end, opts)
 	vim.keymap.set("n", "gD", function()

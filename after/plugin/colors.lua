@@ -6,7 +6,7 @@ function ColorMyPencils(color)
         style = 'dark',
         transparent = true,  -- Show/hide background
     }
-    vim.cmd("colorscheme onedark")
+    require('onedark').load()
 
 
     vim.cmd [[highlight IndentBlanklineContextChar guifg=#C678DD gui=nocombine]]
@@ -18,7 +18,6 @@ function ColorMyPencils(color)
         show_end_of_line = true,
     }
 
-    -- require('onedark').load()
     vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
     vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end

@@ -22,7 +22,7 @@ wk.register({
 		r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" }, -- additional options for creating the keymap
 		s = { ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", "Search" }, -- just a label. don't create any mapping
 		h = { builtin.help_tags, "Help tags" }, -- same as above
-		c = { builtin.commands, "Commands" }, -- special label to hide it in the popup
+		c = { builtin.commands, "Commands" }, -- special label to hide it in tse popup
 		y = { ":NvimTreeToggle<CR>", "Toggle NvimTree" },
 		w = { builtin.lsp_document_symbols, "Document symbols" },
 		e = {
@@ -114,14 +114,6 @@ keymap("n", "<leader><Up>", "<C-W><C-K>", { silent = true, noremap = true })
 keymap("n", "<leader><Left>", "<C-W><C-H>", { silent = true, noremap = true })
 keymap("n", "<leader><Right>", "<C-W><C-L>", { silent = true, noremap = true })
 
--- Context specific bindings
--- Lua
-keymap("n", "<leader>xx", "<cmd>TroubleToggle<cr>", { silent = true, noremap = true })
-keymap("n", "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>", { silent = true, noremap = true })
-keymap("n", "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>", { silent = true, noremap = true })
-keymap("n", "<leader>xl", "<cmd>TroubleToggle loclist<cr>", { silent = true, noremap = true })
-keymap("n", "<leader>xq", "<cmd>TroubleToggle quickfix<cr>", { silent = true, noremap = true })
---
 keymap("o", "r", function()
 	require("flash").remote()
 end)
@@ -157,24 +149,6 @@ keymap("n", "<leader>sw", function()
 		jump = { pos = "range" },
 	})
 end, { silent = true, noremap = true, desc = "Flash select word" })
-
--- {
--- s",
--- mode = { "n", "x", "o" },
--- function()
--- default options: exact mode, multi window, all directions, with a backdrop
--- require("flash").jump()
--- end,
--- },
--- {
--- "S",
--- mode = { "o", "x" },
--- function()
--- require("flash").treesitter()
--- end,
--- },
--- },
-keymap("n", "gR", "<cmd>TroubleToggle lsp_references<cr>", { silent = true, noremap = true })
 
 keymap("n", "<leader><leader>", function()
 	vim.cmd("so")
@@ -258,6 +232,7 @@ keymap("v", "p", '"_dP', silent)
 keymap("i", "<C-c>", "<Esc>")
 
 keymap("n", "Q", "<nop>")
+
 -- Save file by ESC
 keymap("n", "<ESC>", ":w<CR>", silent)
 keymap("i", "<ESC>", "<ESC>:w<CR>", silent)
@@ -285,7 +260,7 @@ keymap(
 -- show references of word under cursor
 keymap("n", "<leader>rs", function()
 	builtin.lsp_references({ fname_width = 100 })
-end, { noremap = true, nowait = true, silent = true })
+end, { noremap = true, nowait = true, silent = true, desc = "Show references" })
 
 keymap(
 	"n",
@@ -318,16 +293,6 @@ vim.keymap.set("n", "<leader>pp", function()
 	})
 end)
 
-vim.keymap.set("i", "<c-t>", function()
-	jfind.jfind({
-		input = { 1, 2, 3, 4, 5 },
-		preview = "figlet",
-		previewPosition = "right",
-		callback = function(result)
-			print("result: " .. result)
-		end,
-	})
-end)
 local preview
 if vim.fn.executable("bat") == 1 then
 	preview = "bat --color always --theme ansi --style plain"
@@ -479,36 +444,24 @@ keymap({ "n", "i" }, "<C-l>", function()
 	require("logsitter").log()
 end, { silent = true, noremap = true })
 
-local Terminal = require("toggleterm.terminal").Terminal
-local lazygit =
-	Terminal:new({ cmd = "lazygit", hidden = true, direction = "float", float_opts = { border = "double" } })
-local term = Terminal:new({
-	hidden = true,
-	direction = "float",
-	float_opts = { border = "double" },
-	on_open = function(term)
-		vim.cmd("startinsert!")
-	end,
-})
 
-function _Lazygit_toggle()
-	lazygit:toggle()
-end
+keymap("x", "<leader>re", function() require('refactoring').refactor('Extract Function') end, {desc = 'Extract Function'})
+keymap("x", "<leader>rf", function() require('refactoring').refactor('Extract Function To File') end, {desc = 'Extract Function To File'})
+-- Extract function supports only visual mode
+keymap("x", "<leader>rv", function() require('refactoring').refactor('Extract Variable') end, {desc = 'Extract Variable'})
+-- Extract variable supports only visual mode
+keymap({ "n", "x" }, "<leader>ri", function() require('refactoring').refactor('Inline Variable') end, {desc = 'Inline Variable'})
+-- Inline var supports both normal and visual mode
 
-keymap("n", "<leader>gt", function()
-	_Lazygit_toggle()
-end, { noremap = true, silent = true })
+keymap("n", "<leader>rb", function() require('refactoring').refactor('Extract Block') end, {desc = 'Extract Block'})
+keymap("n", "<leader>rbf", function() require('refactoring').refactor('Extract Block To File') end, {desc = 'Extract Block To File'})
 
-function _G.set_terminal_keymaps()
-	local opts = { buffer = 0 }
-	vim.keymap.set("t", "<C-w>", function()
-		term:close()
-		lazygit:close()
-	end, opts)
-end
--- if you only want these mappings for toggle term use term://*toggleterm#* instead
-vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
 
-keymap("n", "<leader>tt", function()
-	term:toggle()
-end, { noremap = true, silent = true })
+-- prompt for a refactor to apply when the remap is triggered
+vim.keymap.set(
+    {"n", "x"},
+    "<leader>rr",
+    function() require('refactoring').select_refactor() end,
+    {noremap = true, silent = true, desc = 'Select Refactoring'}
+)
+-- Note that not all refactor support both normal and visual mode
