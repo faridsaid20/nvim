@@ -40,7 +40,7 @@ return require("packer").startup(function(use)
 			{
 				-- Optional
 				"williamboman/mason.nvim",
-				run = ":MasonUpdate",
+				run = "MasonUpdate",
 			},
 			{ "williamboman/mason-lspconfig.nvim" }, -- Optional
 
@@ -85,10 +85,8 @@ return require("packer").startup(function(use)
 		"folke/flash.nvim",
 		config = function()
 			require("flash").setup({
-				modes = {
-					char = {
-						enabled = false,
-					},
+				char = {
+					enabled = false,
 				},
 				highlight = {
 					label = {
@@ -219,14 +217,4 @@ return require("packer").startup(function(use)
 	use("norcalli/nvim-colorizer.lua") -- colorize hex colors
 	use({ "akinsho/bufferline.nvim", tag = "*", requires = "nvim-tree/nvim-web-devicons" })
 	use({ "echasnovski/mini.ai", branch = "stable" })
-	use({ "/home/ubuntu/workspace/logsitter.nvim", requires = { "nvim-treesitter/nvim-treesitter" } })
-	use({
-		"akinsho/toggleterm.nvim",
-		tag = "*",
-		config = function()
-			require("toggleterm").setup({
-				open_mapping = [[<c-/>]],
-			})
-		end,
-	})
 end)

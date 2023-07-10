@@ -4,7 +4,6 @@ function ColorMyPencils(color)
     require 'colorizer'.setup()
     require('onedark').setup {
         style = 'dark',
-        transparent = true,  -- Show/hide background
     }
     vim.cmd("colorscheme onedark")
 
@@ -19,8 +18,8 @@ function ColorMyPencils(color)
     }
 
     -- require('onedark').load()
-    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+    -- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+    -- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
 ColorMyPencils()

@@ -17,9 +17,7 @@ null_ls.setup({
         formatting.clang_format,
         formatting.isort,
         formatting.black,
-        formatting.beautysh,
         diagnostics.eslint_d,
-        diagnostics.zsh,
         code_actions.eslint_d,
         code_actions.gitsigns,
         completion.luasnip

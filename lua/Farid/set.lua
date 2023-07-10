@@ -22,7 +22,7 @@ vim.opt.incsearch = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
-vim.opt.cursorline = false
+vim.opt.cursorline = true
 
 vim.opt.termguicolors = true
 

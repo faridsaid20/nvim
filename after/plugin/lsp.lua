@@ -1,7 +1,6 @@
 local wk = require("which-key")
 local lsp = require("lsp-zero")
 local lspkind = require("lspkind")
-local luasnip = require("luasnip")
 
 lsp.preset("recommended")
 
@@ -9,10 +8,7 @@ lsp.ensure_installed({
 	"rust_analyzer",
 })
 require("typescript-tools").setup({
-	on_attach = function(client)
-		client.server_capabilities.documentFormattingProvider = false
-		client.server_capabilities.documentRangeFormattingProvider = false
-	end,
+	on_attach = on_attach,
 	settings = {
 		-- spawn additional tsserver instance to calculate diagnostics on it
 		separate_diagnostic_server = true,
@@ -20,7 +16,7 @@ require("typescript-tools").setup({
 		publish_diagnostic_on = "insert_leave",
 		-- specify a list of plugins to load by tsserver, e.g., for support `styled-components`
 		-- (see 💅 `styled-components` support section)
-		tsserver_plugins = { "@styled/typescript-styled-plugin" },
+		tsserver_plugins = { "typescript-styled-plugin" },
 		-- described below
 		tsserver_format_options = {},
 		tsserver_file_preferences = {
@@ -44,13 +40,6 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 	["<CR>"] = cmp.mapping.confirm({ select = true }),
 	["<C-Space>"] = cmp.mapping.complete(),
 	["<C-e>"] = cmp.mapping.close(),
-	["<C-y>"] = cmp.mapping(function(fallback)
-		if luasnip.expand_or_jumpable() then
-			luasnip.expand_or_jump()
-		else
-			fallback()
-		end
-	end, { "i", "s" }),
 })
 
 cmp_mappings["<Tab>"] = nil
@@ -104,14 +93,8 @@ cmp.setup.cmdline(":", {
 		},
 	}),
 })
-
 lsp.setup_nvim_cmp({
 	mapping = cmp_mappings,
-	snippet = {
-		expand = function(args)
-			require("luasnip").lsp_expand(args.body)
-		end,
-	},
 	sources = {
 		{ name = "nvim_lsp" },
 		{ name = "buffer" },
@@ -143,26 +126,14 @@ lsp.set_preferences({
 		info = "I",
 	},
 })
-local function format(buf)
-	local null_ls_sources = require("null-ls.sources")
-	local ft = vim.bo[buf].filetype
-
-	local has_null_ls = #null_ls_sources.get_available(ft, "NULL_LS_FORMATTING") > 0
-
-	vim.lsp.buf.format({
-		bufnr = buf,
-		filter = function(client)
-			if has_null_ls then
-				return client.name == "null-ls"
-			else
-				return true
-			end
-		end,
-	})
-end
-
 lsp.on_attach(function(client, bufnr)
 	local opts = { buffer = bufnr, remap = false }
+	local null_ls_formatting_available = false
+	local sources_loaded, null_ls_sources = pcall(require, "null-ls.sources")
+	if sources_loaded then
+		local null_ls_formatting_sources = null_ls_sources.get_available(vim.bo.filetype, "NULL_LS_FORMATTING")
+		null_ls_formatting_available = #null_ls_formatting_sources ~= 0
+	end
 	wk.register({
 		v = {
 			name = "lsp", -- optional group name
@@ -197,7 +168,15 @@ lsp.on_attach(function(client, bufnr)
 		},
 		f = {
 			function()
-				format(bufnr)
+				vim.lsp.buf.format({
+					filter = function(format_client)
+						if format_client.name == "null-ls" then
+							return null_ls_formatting_available
+						else
+							return true
+						end
+					end,
+				})
 			end,
 			"Format",
 			opts,

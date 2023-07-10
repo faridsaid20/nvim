@@ -21,6 +21,7 @@ require("jfind").setup({
 		"*roc_cap_gui*",
 	},
 	windowBorder = true,
-	maxWidth = 140,
+	maxWidth = 150,
 	maxHeight = 50,
+	wrap_item_list = true,
 })
