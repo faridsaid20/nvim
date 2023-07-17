@@ -7,14 +7,14 @@ lsp.preset("recommended")
 lsp.ensure_installed({
 	"rust_analyzer",
 })
-require'lspconfig'.cssmodules_ls.setup {
-    -- provide your on_attach to bind keymappings
-    on_attach = custom_on_attach,
-    -- optionally
-    init_options = {
-        camelCase = false,
-    },
-}
+require("lspconfig").cssmodules_ls.setup({
+	-- provide your on_attach to bind keymappings
+	on_attach = custom_on_attach,
+	-- optionally
+	init_options = {
+		camelCase = false,
+	},
+})
 require("typescript-tools").setup({
 	on_attach = function(client)
 		client.server_capabilities.documentFormattingProvider = false
@@ -50,13 +50,13 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 	["<Down>"] = cmp.mapping.select_next_item(cmp_select),
 	["<CR>"] = cmp.mapping.confirm({ select = true }),
 	["<C-Space>"] = cmp.mapping.complete(),
-    ["<C-y>"] = cmp.mapping(function(fallback)
-      if luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
+	["<C-y>"] = cmp.mapping(function(fallback)
+		if luasnip.expand_or_locally_jumpable() then
+			luasnip.expand_or_jump()
+		else
+			fallback()
+		end
+	end, { "i", "s" }),
 	["<C-e>"] = cmp.mapping.close(),
 })
 
@@ -151,19 +151,12 @@ lsp.set_preferences({
 	},
 })
 
-local function goToDefinition(bufnr)
-	-- Get all clients attached to the buffer
-	local clients = vim.lsp.buf_get_clients(bufnr)
-	-- Print the client names
-	local isTs = false
-	for _, client in ipairs(clients) do
-		if client.name == "typescript-tools" then
-			isTs = true
-		end
-	end
-	if isTs then
+local function goToDefinition()
+	local success, err = pcall(function()
 		vim.cmd("TSToolsGoToSourceDefinition")
-	else
+	end)
+	-- If TSToolsGoToSourceDefinition fails, call vim.lsp.buf.definition()
+	if not success then
 		vim.lsp.buf.definition()
 	end
 end
@@ -209,7 +202,7 @@ lsp.on_attach(function(client, bufnr)
 	end, "Format", bufnr)
 
 	vim.keymap.set("n", "gd", function()
-		goToDefinition(bufnr)
+		goToDefinition()
 	end, opts)
 	vim.keymap.set("n", "gs", function()
 		vim.lsp.buf.definition()
