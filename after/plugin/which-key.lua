@@ -1,6 +1,5 @@
 local wk = require("which-key")
 local builtin = require("telescope.builtin")
-local live_grep_args_shortcuts = require("telescope-live-grep-args.shortcuts")
 local jfind = require("jfind")
 local key = require("jfind.key")
 local keymap = vim.keymap.set
@@ -15,13 +14,6 @@ wk.register({
 		c = { builtin.commands, "Commands" }, -- special label to hide it in tse popup
 		y = { ":NvimTreeToggle<CR>", "Toggle NvimTree" },
 		w = { builtin.lsp_document_symbols, "Document symbols" },
-		e = {
-			function()
-				require("chatgpt").openChat()
-			end,
-			"chatgpt",
-			-- mode = "v"
-		},
 		t = { ":lua PopupTerminal()<CR>", "Terminal" },
 	},
 	t = {
@@ -43,7 +35,6 @@ wk.register({
 			end,
 			"Flash word under cursor",
 		},
-		g = { live_grep_args_shortcuts.grep_word_under_cursor, "Grep in workspace" },
 		f = { builtin.current_buffer_fuzzy_find, "Fuzzy fund in current buffer" },
 	},
 	-- x = {
@@ -80,10 +71,6 @@ wk.register({
 		name = "Party time",
 		r = { "<cmd>CellularAutomaton make_it_rain<CR>", "Make it rain" },
 		l = { "<cmd>CellularAutomaton game_of_life<CR>", "Game of life" },
-	},
-	u = {
-		name = "undo tree",
-		u = { vim.cmd.UndotreeToggle, "Undo" },
 	},
 	w = {
 		w = { "<cmd>bufdo write<CR>", "Save all" },
@@ -209,9 +196,6 @@ function JumpToLineStartAndClearHighlights()
 	vim.cmd("normal! ^")
 	vim.cmd("silent! noh")
 end
-
--- search selected code in workspace
-keymap("v", "<leader>sv", live_grep_args_shortcuts.grep_visual_selection)
 
 keymap("v", "p", '"_dP', silent)
 
