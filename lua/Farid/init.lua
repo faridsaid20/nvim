@@ -13,6 +13,7 @@ augroup custom_keymaps
 
     autocmd VimEnter * inoremap <C-t> <Nop>
     autocmd VimEnter * set cmdheight=1
+    autocmd FileType python setlocal scroll=30
 augroup END
 ]]
 

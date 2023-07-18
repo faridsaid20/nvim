@@ -1,4 +1,5 @@
 return {
-	dir = "/home/ubuntu/workspace/logsitter.nvim",
+    "faridsaid20/logsitter.nvim",
 	dependencies = { "nvim-treesitter/nvim-treesitter" },
+    lazy = true
 }
