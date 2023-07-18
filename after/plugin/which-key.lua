@@ -1,20 +1,10 @@
-local ui = require("harpoon.ui")
-local mark = require("harpoon.mark")
 local wk = require("which-key")
 local builtin = require("telescope.builtin")
-local chatgpt = require("chatgpt")
 local live_grep_args_shortcuts = require("telescope-live-grep-args.shortcuts")
 local jfind = require("jfind")
 local key = require("jfind.key")
 local keymap = vim.keymap.set
 local silent = { silent = true }
-vim.g.mapleader = " "
-require("harpoon").setup({
-	menu = {
-		width = math.floor(vim.api.nvim_win_get_width(0) * 0.8),
-	},
-})
-local flash = require("flash")
 wk.register({
 	p = {
 		name = "telescope/gpt", -- optional group name
@@ -27,7 +17,7 @@ wk.register({
 		w = { builtin.lsp_document_symbols, "Document symbols" },
 		e = {
 			function()
-				chatgpt.openChat()
+				require("chatgpt").openChat()
 			end,
 			"chatgpt",
 			-- mode = "v"
@@ -47,7 +37,7 @@ wk.register({
 		s = { [[*]], "Search in current buff" },
 		w = {
 			function()
-				flash.jump({
+				require("flash").jump({
 					pattern = vim.fn.expand("<cword>"),
 				})
 			end,
@@ -105,7 +95,6 @@ wk.register({
 	},
 	qq = { "<cmd>q!<CR>", "Quit without saving" },
 	q = { "<cmd>q<CR>", "Quit" },
-	a = { mark.add_file, "Harpoon add" },
 	h = { name = "gitSigns" },
 }, { prefix = "<leader>" })
 
@@ -152,9 +141,6 @@ end, { silent = true, noremap = true, desc = "Flash select word" })
 
 keymap("n", "<leader><leader>", function()
 	vim.cmd("so")
-	if vim.fn.exists(":PackerSync") ~= 0 then
-		vim.cmd("silent! PackerSync")
-	end
 end)
 
 local api = vim.api
@@ -275,7 +261,6 @@ vim.api.nvim_set_keymap("n", "tb", ":normal gbc<CR>", { noremap = true, silent =
 vim.api.nvim_set_keymap("v", "tt", ":normal gcc<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("v", "tb", ":normal gbc<CR>", { noremap = true, silent = true })
 
-keymap("n", "<C-b>", ui.toggle_quick_menu)
 keymap("n", "<C-h>", "<cmd>ClangdSwitchSourceHeader<CR>", silent)
 -- {'n', 'v', 'x', 's', 'o', 'i', 'c', 't'}
 vim.keymap.set("n", "<leader>pp", function()
@@ -319,40 +304,6 @@ vim.keymap.set("n", "<leader>pl", function()
 			[key.CTRL_N] = jfind.vsplitGotoLine,
 		},
 	})
-end)
-
-keymap("n", "<C-z>", function()
-	ui.nav_file(1)
-end)
-keymap("v", "<C-z>", function()
-	ui.nav_file(1)
-end)
-keymap("x", "<C-z>", function()
-	ui.nav_file(1)
-end)
-keymap("s", "<C-z>", function()
-	ui.nav_file(1)
-end)
-keymap("o", "<C-z>", function()
-	ui.nav_file(1)
-end)
-keymap("i", "<C-z>", function()
-	ui.nav_file(1)
-end)
-keymap("c", "<C-z>", function()
-	ui.nav_file(1)
-end)
-keymap("t", "<C-z>", function()
-	ui.nav_file(1)
-end)
-keymap("n", "<C-f>", function()
-	ui.nav_file(2)
-end)
-keymap("n", "<C-o>", function()
-	ui.nav_file(3)
-end)
-keymap("n", "<C-u>", function()
-	ui.nav_file(4)
 end)
 
 keymap("i", "<M-n>", "<Plug>(copilot-next)", { silent = true, noremap = true })
@@ -444,24 +395,31 @@ keymap({ "n", "i" }, "<C-l>", function()
 	require("logsitter").log()
 end, { silent = true, noremap = true })
 
-
-keymap("x", "<leader>re", function() require('refactoring').refactor('Extract Function') end, {desc = 'Extract Function'})
-keymap("x", "<leader>rf", function() require('refactoring').refactor('Extract Function To File') end, {desc = 'Extract Function To File'})
+keymap("x", "<leader>re", function()
+	require("refactoring").refactor("Extract Function")
+end, { desc = "Extract Function" })
+keymap("x", "<leader>rf", function()
+	require("refactoring").refactor("Extract Function To File")
+end, { desc = "Extract Function To File" })
 -- Extract function supports only visual mode
-keymap("x", "<leader>rv", function() require('refactoring').refactor('Extract Variable') end, {desc = 'Extract Variable'})
+keymap("x", "<leader>rv", function()
+	require("refactoring").refactor("Extract Variable")
+end, { desc = "Extract Variable" })
 -- Extract variable supports only visual mode
-keymap({ "n", "x" }, "<leader>ri", function() require('refactoring').refactor('Inline Variable') end, {desc = 'Inline Variable'})
+keymap({ "n", "x" }, "<leader>ri", function()
+	require("refactoring").refactor("Inline Variable")
+end, { desc = "Inline Variable" })
 -- Inline var supports both normal and visual mode
 
-keymap("n", "<leader>rb", function() require('refactoring').refactor('Extract Block') end, {desc = 'Extract Block'})
-keymap("n", "<leader>rbf", function() require('refactoring').refactor('Extract Block To File') end, {desc = 'Extract Block To File'})
-
+keymap("n", "<leader>rb", function()
+	require("refactoring").refactor("Extract Block")
+end, { desc = "Extract Block" })
+keymap("n", "<leader>rbf", function()
+	require("refactoring").refactor("Extract Block To File")
+end, { desc = "Extract Block To File" })
 
 -- prompt for a refactor to apply when the remap is triggered
-vim.keymap.set(
-    {"n", "x"},
-    "<leader>rr",
-    function() require('refactoring').select_refactor() end,
-    {noremap = true, silent = true, desc = 'Select Refactoring'}
-)
+vim.keymap.set({ "n", "x" }, "<leader>rr", function()
+	require("refactoring").select_refactor()
+end, { noremap = true, silent = true, desc = "Select Refactoring" })
 -- Note that not all refactor support both normal and visual mode
