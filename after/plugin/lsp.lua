@@ -57,11 +57,13 @@ require("lspconfig").clangd.setup({
 	on_attach = on_attach,
 	init_options = {
 		compilationDatabasePath = "./build/rcsos-2.4.0_x86_4.4.50-rt63/Release/",
+        usePlaceholders = true,
+        completeUnimported = true,
+        clangdFileStatus = true,
 	},
 	capabilities = cmp_nvim_lsp.default_capabilities(),
 	cmd = {
 		"env",
-
 		-- /usr/include/c++/11
 		-- /usr/include/x86_64-linux-gnu/c++/11
 		-- /usr/include/c++/11/backward
@@ -71,6 +73,12 @@ require("lspconfig").clangd.setup({
 		-- /usr/include
 		"CPATH=/usr/include/c++/11:/usr/include/x86_64-linux-gnu/c++/11:/usr/include/c++/11/backward:/usr/lib/gcc/x86_64-linux-gnu/11/include:/usr/local/include:/usr/include/x86_64-linux-gnu:/usr/include",
 		"clangd",
+        "--clang-tidy",
+        "--background-index",
+        "--header-insertion=iwyu",
+        "--completion-style=detailed",
+        "--function-arg-placeholders",
+        "--fallback-style=llvm",
 		"--offset-encoding=utf-16",
 	},
 })

@@ -21,9 +21,17 @@ return {
 			})
 		end,
 	}, -- highlight scope lines
-	{ "RRethy/vim-illuminate", event = "InsertEnter" }, -- highlight other uses of the word under the cursor
+	{ "RRethy/vim-illuminate", lazy = false }, -- highlight other uses of the word under the cursor
 	{ "kevinhwang91/nvim-bqf", lazy = false }, -- quickfix preview window
 	{ "windwp/nvim-ts-autotag", event = "InsertEnter" }, -- auto close tags
+    {
+        "barrett-ruth/import-cost.nvim",
+        build = "sh install.sh npm",
+        lazy = false,
+        config = function ()
+            require("import-cost").setup()
+        end
+    },
 	{
 		"norcalli/nvim-colorizer.lua",
 		event = "VeryLazy",
@@ -41,5 +49,5 @@ return {
 	},
 
 	{ "ThePrimeagen/vim-be-good", lazy = true },
-	{ "mg979/vim-visual-multi", branch = "master", event = "InsertEnter", }
+	{ "mg979/vim-visual-multi", branch = "master", event = "InsertEnter" },
 }

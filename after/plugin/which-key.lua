@@ -177,6 +177,7 @@ function JumpToLineStartAndClearHighlights()
 	vim.cmd("silent! noh")
 end
 
+keymap("n", "<leader>pb", "<CMD>Oil<CR>", { desc = "Open parent directory", noremap = true })
 keymap("v", "p", '"_dP', silent)
 
 keymap("i", "<C-c>", "<Esc>")

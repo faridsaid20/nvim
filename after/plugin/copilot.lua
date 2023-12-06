@@ -35,6 +35,7 @@ require('copilot').setup({
     gitrebase = true,
     hgcommit = true,
   },
-  copilot_node_command = 'node', -- Node.js version must be > 16.x
+
+  copilot_node_command = "/home/ubuntu/.nvm/versions/node/v18.16.1/bin/node", -- Node.js version must be > 18.x
   server_opts_overrides = {},
 })
