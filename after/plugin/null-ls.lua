@@ -21,8 +21,8 @@ null_ls.setup({
 		diagnostics.zsh,
         diagnostics.flake8,
         diagnostics.mypy,
-        diagnostics.shellcheck,
+        -- diagnostics.shellcheck,
 		code_actions.eslint_d,
-        code_actions.shellcheck,
+        -- code_actions.shellcheck,
 	},
 })
