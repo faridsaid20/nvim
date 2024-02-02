@@ -17,7 +17,7 @@ return {
 	config = function()
 		require("chatgpt").setup({
 			openai_params = {
-				max_tokens = 8192,
+				max_tokens = 4000,
 			},
 		})
 	end,

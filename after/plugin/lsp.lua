@@ -9,7 +9,7 @@ lsp.ensure_installed({
 })
 require("lspconfig").cssmodules_ls.setup({
 	-- provide your on_attach to bind keymappings
-	on_attach = custom_on_attach,
+	on_attach = lsp.on_attach,
 	-- optionally
 	init_options = {
 		camelCase = false,
@@ -39,11 +39,9 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 cmp_mappings["<Tab>"] = nil
 cmp_mappings["<C-n>"] = nil
 cmp_mappings["<C-p>"] = nil
-local cmp_nvim_lsp = require("cmp_nvim_lsp")
-
+local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 require("lspconfig").pyright.setup({
-	capabilities = cmp_nvim_lsp.default_capabilities(),
-	on_attach = on_attach,
+	on_attach = lsp.on_attach,
 	settings = {
 		python = {
 			analysis = {
@@ -52,36 +50,56 @@ require("lspconfig").pyright.setup({
 		},
 	},
 })
-
 require("lspconfig").clangd.setup({
-	on_attach = on_attach,
+	on_attach = function(client, bufnr)
+		lsp.on_attach(client, bufnr)
+	end,
+
 	init_options = {
-		compilationDatabasePath = "./build/rcsos-2.4.0_x86_4.4.50-rt63/Release/",
-        usePlaceholders = true,
-        completeUnimported = true,
-        clangdFileStatus = true,
+		usePlaceholders = true,
+		clangdFileStatus = true,
 	},
-	capabilities = cmp_nvim_lsp.default_capabilities(),
 	cmd = {
-		"env",
-		-- /usr/include/c++/11
-		-- /usr/include/x86_64-linux-gnu/c++/11
-		-- /usr/include/c++/11/backward
-		-- /usr/lib/gcc/x86_64-linux-gnu/11/include
-		-- /usr/local/include
-		-- /usr/include/x86_64-linux-gnu
-		-- /usr/include
-		"CPATH=/usr/include/c++/11:/usr/include/x86_64-linux-gnu/c++/11:/usr/include/c++/11/backward:/usr/lib/gcc/x86_64-linux-gnu/11/include:/usr/local/include:/usr/include/x86_64-linux-gnu:/usr/include",
 		"clangd",
-        "--clang-tidy",
-        "--background-index",
-        "--header-insertion=iwyu",
-        "--completion-style=detailed",
-        "--function-arg-placeholders",
-        "--fallback-style=llvm",
+		"--clang-tidy",
+		"--completion-style=detailed",
 		"--offset-encoding=utf-16",
+		"--background-index",
+		"--all-scopes-completion",
+		"--query-driver=/opt/sdks/rcsos-2.4.0/x86_4.4.50-rt63/sysroots/x86_64-rcssdk-linux/usr/bin/i586-rcs-linux/i586-rcs-linux-g++",
 	},
 })
+
+-- require("lspconfig").clangd.setup({
+-- on_attach = on_attach,
+-- init_options = {
+-- usePlaceholders = true,
+-- completeUnimported = true,
+-- clangdFileStatus = true,
+-- },
+-- capabilities = cmp_nvim_lsp.default_capabilities(),
+-- cmd = {
+-- "env",
+-- /usr/include/c++/11
+-- /usr/include/x86_64-linux-gnu/c++/11
+-- /usr/include/c++/11/backward
+-- /usr/lib/gcc/x86_64-linux-gnu/11/include
+-- /usr/local/include
+-- /usr/include/x86_64-linux-gnu
+-- /usr/include
+-- "CPATH=/usr/include/c++/11:/usr/include/x86_64-linux-gnu/c++/11:/usr/include/c++/11/backward:/usr/lib/gcc/x86_64-linux-gnu/11/include:/usr/local/include:/usr/include/x86_64-linux-gnu:/usr/include",
+-- "clangd",
+-- "--clang-tidy",
+-- "--background-index",
+-- "--header-insertion=iwyu",
+-- "--completion-style=detailed",
+-- "--function-arg-placeholders",
+-- "--fallback-style=llvm",
+-- "--offset-encoding=utf-16",
+-- "--query-driver=/opt/sdks/rcsos-2.4.0/x86_4.4.50-rt63/sysroots/x86_64-rcssdk-linux/usr/bin/i586-rcs-linux/i586-rcs-linux-g++"
+-- "--query-driver=/opt/sdks/rcsos-3.3.0/x86-64_4.19.180-rt73/sysroots/x86_64-rcsossdk-linux/usr/bin/x86_64-rcsos-linux/x86_64-rcsos-linux-g++"
+-- },
+-- })
 cmp.setup.cmdline(":", {
 	mapping = cmp.mapping.preset.cmdline(),
 	sources = cmp.config.sources({
@@ -145,30 +163,18 @@ local function goToDefinition()
 	end
 end
 
-local function format(buf)
-	local null_ls_sources = require("null-ls.sources")
-	local ft = vim.bo[buf].filetype
-	local has_null_ls = #null_ls_sources.get_available(ft, "NULL_LS_FORMATTING") > 0
-
-	vim.lsp.buf.format({
-		bufnr = buf,
-		async = true,
-		filter = function(client)
-			if has_null_ls then
-				return client.name == "null-ls"
-			else
-				return true
-			end
-		end,
-	})
-end
-
 local keymap = function(mode, key, action, desc, buffer)
 	vim.keymap.set(mode, key, action, { noremap = true, silent = true, desc = desc, buffer = buffer })
 end
 
 lsp.on_attach(function(client, bufnr)
 	local opts = { buffer = bufnr, remap = false }
+
+	if client.server_capabilities.inlayHintProvider then
+		vim.lsp.inlay_hint.enable(bufnr, true)
+	else
+		print("no inlay hints available")
+	end
 	keymap("n", "<leader>vw", function()
 		vim.lsp.buf.workspace_symbol()
 	end, "Workspace symbol", bufnr)
@@ -182,7 +188,7 @@ lsp.on_attach(function(client, bufnr)
 		vim.lsp.buf.rename()
 	end, "Rename", bufnr)
 	keymap("n", "<leader>f", function()
-		format(bufnr)
+		require("conform").format({ bufnr = bufnr })
 	end, "Format", bufnr)
 
 	vim.keymap.set("n", "gd", function()
@@ -204,6 +210,7 @@ lsp.on_attach(function(client, bufnr)
 		vim.lsp.buf.signature_help()
 	end, opts)
 end)
+lsp.capabilities = capabilities
 
 -- vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
 -- vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)

@@ -2,6 +2,7 @@ local wk = require("which-key")
 local jfind = require("jfind")
 local key = require("jfind.key")
 local keymap = vim.keymap.set
+
 local silent = { silent = true }
 wk.register({
 	p = {
@@ -178,6 +179,7 @@ function JumpToLineStartAndClearHighlights()
 end
 
 keymap("n", "<leader>pb", "<CMD>Oil<CR>", { desc = "Open parent directory", noremap = true })
+keymap("n", "<C-q>", "<cmd>:bd<CR>", { desc = "close current buffer", noremap = true, silent = true })
 keymap("v", "p", '"_dP', silent)
 
 keymap("i", "<C-c>", "<Esc>")
@@ -221,7 +223,6 @@ keymap(
 )
 
 keymap("n", "<C-h>", "<cmd>ClangdSwitchSourceHeader<CR>", silent)
--- {'n', 'v', 'x', 's', 'o', 'i', 'c', 't'}
 vim.keymap.set("n", "<leader>pp", function()
 	jfind.findFile({
 		formatPaths = true,
@@ -249,7 +250,6 @@ vim.keymap.set("n", "<leader>pl", function()
 		exclude = { "*.hpp" }, -- overrides setup excludes
 		hidden = true, -- grep hidden files/directories
 		caseSensitivity = "smart", -- sensitive, insensitive, smart
-		--     will use vim settings by default
 		preview = preview,
 		query = "",
 		formatPaths = true,
@@ -268,6 +268,12 @@ end)
 keymap("i", "<M-n>", "<Plug>(copilot-next)", { silent = true, noremap = true })
 keymap("i", "<M-e>", "<Plug>(copilot-previous)", { silent = true, noremap = true })
 keymap("i", "<M-u>", "<cmd> Copilot<CR>", { silent = true, noremap = true })
+
+keymap("i", "<C-p>", '<Esc>pa', { noremap = true })
+keymap("t", "<C-p>", '<C-\\><C-n>pa', { noremap = true, silent = true })
+keymap('c', '<C-p>', '<C-r>+', { noremap = true })
+
+
 
 keymap({ "n", "i" }, "<C-l>", function()
 	require("logsitter").log()
