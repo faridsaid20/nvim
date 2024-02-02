@@ -1,1 +1,5 @@
-return { "jake-stewart/jfind.nvim", branch = "2.0" }
+return { 
+
+	dev = true,
+	dir = "/home/ubuntu/projects/jfind.nvim",
+}

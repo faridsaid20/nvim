@@ -1,5 +1,6 @@
 return {
 	"faridsaid20/ChatGPT.nvim",
+	-- event = "VeryLazy",
 	keys = {
 		{
 			"<leader>pe",
@@ -10,8 +11,15 @@ return {
 			desc = "chatgpt",
 		},
 	},
+	-- dev = true,
+	-- dir = "~/workspace/lua/ChatGPT.nvim",
+
 	config = function()
-		require("chatgpt").setup({})
+		require("chatgpt").setup({
+			openai_params = {
+				max_tokens = 4000,
+			},
+		})
 	end,
 	dependencies = {
 		"MunifTanjim/nui.nvim",

@@ -9,29 +9,17 @@ return {
 			require("nvim-autopairs").setup({})
 		end,
 	},
-	{
-		"lukas-reineke/indent-blankline.nvim",
-		event = "VeryLazy",
-		config = function()
-			require("indent_blankline").setup({
-				space_char_blankline = " ",
-				show_current_context = true,
-				show_current_context_start = true,
-				show_end_of_line = true,
-			})
-		end,
-	}, -- highlight scope lines
 	{ "RRethy/vim-illuminate", lazy = false }, -- highlight other uses of the word under the cursor
 	{ "kevinhwang91/nvim-bqf", lazy = false }, -- quickfix preview window
 	{ "windwp/nvim-ts-autotag", event = "InsertEnter" }, -- auto close tags
-    {
-        "barrett-ruth/import-cost.nvim",
-        build = "sh install.sh npm",
-        lazy = false,
-        config = function ()
-            require("import-cost").setup()
-        end
-    },
+	{
+		"barrett-ruth/import-cost.nvim",
+		build = "sh install.sh npm",
+		lazy = false,
+		config = function()
+			require("import-cost").setup()
+		end,
+	},
 	{
 		"norcalli/nvim-colorizer.lua",
 		event = "VeryLazy",

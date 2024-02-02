@@ -24,8 +24,8 @@ local new_colors = {
 -- }
 -- }
 
-nightfly.normal.c.bg = nil
-nightfly.inactive.c.bg = nil
+-- nightfly.normal.c.bg = nil
+-- nightfly.inactive.c.bg = nil
 lualine.setup({
 	options = {
 		theme = nightfly,
